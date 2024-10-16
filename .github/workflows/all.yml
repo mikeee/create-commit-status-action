@@ -56,14 +56,6 @@ jobs:
       - name: Check out repo
         uses: actions/checkout@v4
 
-      - name: Install UPX
-        uses: crazy-max/ghaction-upx@v3
-        with:
-          install-only: true
-
-      - name: Print UPX version
-        run: upx --version
-
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
@@ -81,7 +73,10 @@ jobs:
             ./main-*
             !*darwin-arm64*
             !*windows-arm64*
-          args: -fq
+          args: -q -9 --force-mac
+
+      - name: Print UPX version
+        run: upx --version
 
       - name: Upload release artifacts
         uses: actions/upload-artifact@v4
