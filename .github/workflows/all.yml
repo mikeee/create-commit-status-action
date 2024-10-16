@@ -73,7 +73,7 @@ jobs:
             ./main-*
             !*darwin-arm64*
             !*windows-arm64*
-          args: -q -9 --force-mac
+          args: -q -9 --force-macos
 
       - name: Print UPX version
         run: upx --version
