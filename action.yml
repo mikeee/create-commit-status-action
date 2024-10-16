@@ -1,0 +1,59 @@
+# Copyright 2024 Mike Nguyen <hey(at)mike.ee>.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# 	http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+---
+name: create-commit-status-action
+description: Create/set commit statuses.
+author: Mike Nguyen
+inputs:
+  token:
+    required: true
+    default: ${{ github.token }}
+    description: The token used for the GitHub Rest API
+  repository-owner:
+    required: true
+    default: ${{ github.repository_owner }}
+    description: The repository owner of the commit status to be set
+  repository:
+    required: true
+    default: ${{ github.repository }}
+    description: The repository of the commit status to be set
+  sha:
+    required: true
+    default: ${{ github.sha }}
+    description: The sha for the status to be added to
+  state:
+    required: true
+    default: error
+    description: The commit status, will default to error if unset
+  target-url:
+    required: false
+    description: >
+      The URL for contextual information on the run
+      Set this as "" to hide the details url placeholder
+  description:
+    required: false
+    description: An optional description for the commit status
+  context:
+    required: false
+    default: default
+    description: A short label to differentiate between other commit statuses
+
+runs:
+  using: node20
+  main: main.js
+
+branding:
+  icon: plus-circle
+  color: orange
