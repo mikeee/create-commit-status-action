@@ -83,6 +83,7 @@ jobs:
         with:
           name: release-files
           path: |
+            .
             !cmd/*
             !pkg/*
             !*.go
