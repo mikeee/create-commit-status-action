@@ -8,12 +8,6 @@ Releases can be built with:
 make release
 ```
 
-Compression of binaries is encouraged
-
-```bash
-make compress-releases
-```
-
 Note: windows-arm64 and darwin-arm64 are not compressed due to non-support and
 compatibility issues respectively.
 

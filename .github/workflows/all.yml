@@ -73,10 +73,15 @@ jobs:
         run: |
           make release
 
-      - name: Compress binaries
-        run: |
-          make compress-releases
-
+      - name: Run UPX
+        uses: crazy-max/ghaction-upx@v3
+        with:
+          version: latest
+          files: |
+            ./main-*
+            !*darwin-arm64*
+            !*windows-arm64*
+          args: -fq
 
       - name: Upload release artifacts
         uses: actions/upload-artifact@v4

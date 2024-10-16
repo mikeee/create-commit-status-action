@@ -14,18 +14,6 @@ $(BUILD_MATRIX):
 release: $(BUILD_MATRIX)
 	@echo Release builds complete
 
-# windows-arm64 is currently skipped as unsupported by upx
-.PHONY: compress-releases
-RELEASE_FILES := $(wildcard $(RELEASEDIR)$(RELEASENAME)-*)
-compress-releases:
-	@for f in $(RELEASE_FILES); do \
-		if [[ ! "$$f" =~ "windows-arm64" ]] && [[ ! "$$f" =~ "darwin-arm64" ]]; then \
-			upx -q -9 --force-macos $$f; \
-		fi; \
-	done
-	@echo Release compression completed
-
-
 .PHONY: cleanup
 cleanup:
 	rm -rf $(RELEASEDIR)
