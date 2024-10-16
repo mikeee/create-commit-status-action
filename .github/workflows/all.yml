@@ -70,9 +70,10 @@ jobs:
         with:
           version: latest
           files: |
-            ./main-*
-            !*darwin-arm64*
-            !*windows-arm64*
+            ./main-darwin-amd64
+            ./main-linux-amd64
+            ./main-linux-arm64
+            ./main-windows-amd64
           args: -q -9 --force-macos
 
       - name: Print UPX version
