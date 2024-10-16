@@ -1,4 +1,4 @@
-RELEASEDIR := ./out/
+RELEASEDIR := ./
 RELEASENAME := main
 
 # populate release version
@@ -16,7 +16,7 @@ release: $(BUILD_MATRIX)
 
 # windows-arm64 is currently skipped as unsupported by upx
 .PHONY: compress-releases
-RELEASE_FILES := $(wildcard $(RELEASEDIR)*)
+RELEASE_FILES := $(wildcard $(RELEASEDIR)$(RELEASENAME)-*)
 compress-releases:
 	@for f in $(RELEASE_FILES); do \
 		if [[ ! "$$f" =~ "windows-arm64" ]] && [[ ! "$$f" =~ "darwin-arm64" ]]; then \
