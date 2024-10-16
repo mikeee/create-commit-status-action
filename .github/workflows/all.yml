@@ -1,0 +1,115 @@
+name: All
+on:
+  pull_request:
+    branches:
+      - "release"
+      - "dev"
+
+  push:
+    branches:
+     - "release"
+
+jobs:
+  go-lint:
+    name: go-lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: "go.mod"
+
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: v1.61
+
+  go-unit-test:
+    name: unit-test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: "go.mod"
+
+      - name: Test
+        run: |
+          go test -v -race ./...
+
+  go-build-and-compress:
+    name: build-and-compress
+    runs-on: ubuntu-latest
+    needs:
+      - go-lint
+      - go-unit-test
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Install UPX
+        uses: crazy-max/ghaction-upx@v3
+        with:
+          install-only: true
+
+      - name: Print UPX version
+        run: upx --version
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: "go.mod"
+
+      - name: Build
+        run: |
+          make release
+
+      - name: Compress binaries
+        run: |
+          make compress-releases
+
+
+      - name: Upload release artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          path: ./out/*
+
+  release:
+    name: release
+    runs-on: ubuntu-latest
+    needs:
+      - go-lint
+      - go-unit-test
+      - go-build-and-compress
+    permissions:
+      contents: write
+
+    if: ${{ github.event_name == 'push' && github.ref == 'release' }}
+
+    steps:
+      - name: Checkout repo (main branch)
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+
+      - name: Display repository structure
+        run: ls -R
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: release
+          branch: main
+
