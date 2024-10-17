@@ -147,7 +147,7 @@ jobs:
           ls -R
 
       - name: Run action
-        uses: ./action.yml
+        uses: ./
         with:
           token: ${{ github.token }}
           repository-owner: mikeee
