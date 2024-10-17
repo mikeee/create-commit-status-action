@@ -112,7 +112,7 @@ jobs:
 
       - name: Display all
         run: |
-          ls -la
+          ls -R
 
   release-test:
     name: release-test
@@ -144,7 +144,7 @@ jobs:
 
       - name: Display all
         run: |
-          ls -la
+          ls -R
 
       - name: Run action
         uses: ./action.yml
