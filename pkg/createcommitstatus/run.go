@@ -16,7 +16,6 @@ package createcommitstatus
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"net/http"
 
@@ -57,7 +56,7 @@ func Run(action *githubactions.Action) error {
 	}
 
 	if status.State != (*string)(&inputs.State) {
-		return errors.New("returned status does not match input")
+		return fmt.Errorf("returned status does not match input, got: %v", *status.State)
 	}
 	return nil
 }
