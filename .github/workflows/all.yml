@@ -142,6 +142,10 @@ jobs:
         with:
          name: release-files
 
+      - name: Display all
+        run: |
+          ls -la
+
       - name: Run action
         uses: ./action.yml
         with:
@@ -154,9 +158,6 @@ jobs:
           description: release-test
           context: release-test/${{ matrix.os }}-node${{ matrix.node_version }}
 
-      - name: Display all
-        run: |
-          ls -la
 
   release:
     name: release
