@@ -142,6 +142,11 @@ jobs:
         with:
          name: release-files
 
+      - name: Make release binaries executable
+        if: runner.os != 'Windows'
+        run: |
+          chmod +x main-*
+
       - name: Display all
         run: |
           ls -R

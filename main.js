@@ -38,7 +38,7 @@ function main() {
   const { platform, arch } = getPlatformAndArch();
 
   // Build the executable path based on platform and architecture
-  let fullPath = './main';
+  let fullPath = 'main';
   fullPath += `-${platform}-${arch}`;
 
   // Use child_process to execute the command
