@@ -136,13 +136,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node_version }}
-          cache: npm
 
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
          name: release-files
-
 
       - name: Run action
         uses: ./action.yml
