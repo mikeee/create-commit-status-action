@@ -16,18 +16,10 @@ package createcommitstatus
 
 import (
 	"errors"
+	"fmt"
+	"strings"
 
 	githubactions "github.com/sethvargo/go-githubactions"
-)
-
-type Status string
-
-const (
-	StatusCancelled = "cancelled" // Should be treated the same as a failure
-	StatusError     = "error"
-	StatusFailure   = "failure"
-	StatusPending   = "pending"
-	StatusSuccess   = "success"
 )
 
 type Inputs struct {
@@ -35,7 +27,7 @@ type Inputs struct {
 	RepositoryOwner string
 	RepositoryName  string
 	SHA             string
-	State           Status
+	State           string
 	TargetURL       *string
 	Description     *string
 	Context         string
@@ -46,17 +38,43 @@ func NewInputs(action *githubactions.Action, config *Config) (*Inputs, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	status, err := getStatus(action)
+	if err != nil {
+		return nil, err
+	}
+
+	targetUrl := action.GetInput("target-url")
+	description := action.GetInput("description")
+
 	inputs := Inputs{
 		GitHubToken:     action.GetInput("token"),
-		RepositoryOwner: "",
-		RepositoryName:  "",
+		RepositoryOwner: action.GetInput("repository-owner"),
+		RepositoryName:  action.GetInput("repository"),
 		SHA:             sha,
-		State:           StatusPending,
-		TargetURL:       nil,
-		Description:     nil,
-		Context:         "",
+		State:           status,
+		TargetURL:       &targetUrl,
+		Description:     &description,
+		Context:         action.GetInput("context"),
 	}
 	return &inputs, nil
+}
+
+func getStatus(action *githubactions.Action) (string, error) {
+	input := strings.ToLower(action.GetInput("state"))
+	switch input {
+	case "":
+		return "failure", nil
+	case "error":
+		return "error", nil
+	case "failure":
+		return "failure", nil
+	case "pending":
+		return "pending", nil
+	case "success":
+		return "success", nil
+	}
+	return "", fmt.Errorf("invalid state provided: %v", input)
 }
 
 func getSHA(action *githubactions.Action, config *Config) (string, error) {

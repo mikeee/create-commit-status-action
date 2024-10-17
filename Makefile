@@ -16,4 +16,4 @@ release: $(BUILD_MATRIX)
 
 .PHONY: cleanup
 cleanup:
-	rm -rf $(RELEASEDIR)
+	rm -f main-*
