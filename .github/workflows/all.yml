@@ -114,6 +114,52 @@ jobs:
         run: |
           ls -la
 
+  release-test:
+    name: release-test
+    strategy:
+      fail-fast: false # allow for all tests to complete
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest] # TODO: add arm64 validation
+        node_version: [18, 20, 22]
+    runs-on: ${{ matrix.os }}
+    needs: go-build-and-compress
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repo (main branch)
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node_version }}
+          cache: npm
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+         name: release-files
+
+
+      - name: Run action
+        uses: ./action.yml
+        with:
+          token: ${{ github.token }}
+          repository-owner: mikeee
+          repository: create-commits-status-action
+          sha: ${{ github.sha }}
+          state: success
+          target-url: ""
+          description: release-test
+          context: release-test/${{ matrix.os }}-node${{ matrix.node_version }}
+
+      - name: Display all
+        run: |
+          ls -la
+
   release:
     name: release
     runs-on: ubuntu-latest
