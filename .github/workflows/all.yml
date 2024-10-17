@@ -124,6 +124,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     needs: go-build-and-compress
     permissions:
+      statuses: write
       contents: read
 
     steps:
@@ -156,7 +157,7 @@ jobs:
         with:
           token: ${{ github.token }}
           repository-owner: mikeee
-          repository: create-commits-status-action
+          repository: create-commit-status-action
           sha: ${{ github.sha }}
           state: success
           target-url: ""
