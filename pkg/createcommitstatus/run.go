@@ -42,7 +42,7 @@ func Run(action *githubactions.Action) error {
 		inputs.RepositoryName,
 		inputs.SHA,
 		&github.RepoStatus{
-			State:       (*string)(&inputs.State),
+			State:       &inputs.State,
 			TargetURL:   inputs.TargetURL,
 			Description: inputs.Description,
 			Context:     &inputs.Context,
@@ -55,8 +55,8 @@ func Run(action *githubactions.Action) error {
 		return fmt.Errorf("error creating status - expected code: %v, received code: %v", http.StatusCreated, resp.StatusCode)
 	}
 
-	if status.State != (*string)(&inputs.State) {
-		return fmt.Errorf("returned status does not match input, got: %v", *status.State)
+	if *status.State != inputs.State {
+		return fmt.Errorf("returned status does not match input, got: %v, expected: %v", *status.State, inputs.State)
 	}
 	return nil
 }
