@@ -35,8 +35,8 @@ inputs:
     description: The sha for the status to be added to
   state:
     required: true
-    default: error
-    description: The commit status, will default to error if unset
+    default: failure
+    description: The commit status, will default to failure if unset
   target-url:
     required: false
     description: >

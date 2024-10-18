@@ -25,6 +25,6 @@ func main() {
 	action := githubactions.New()
 	action.Debugf("create-commit-status-action release sha: %v", Version)
 	if err := createcommitstatus.Run(action); err != nil {
-		action.Fatalf("failed to create-commit-status-action failed")
+		action.Fatalf("failed to create-commit-status-action failed, %v", err)
 	}
 }

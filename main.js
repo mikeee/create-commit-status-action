@@ -15,7 +15,8 @@
 // JS shim to launch the relevant binary.
 
 const os = require('os');
-const child_process = require('child_process');
+const { spawnSync } = require('child_process');
+const process = require('process')
 
 function getPlatformAndArch() {
   let platform = os.platform();
@@ -37,21 +38,16 @@ function getPlatformAndArch() {
 function main() {
   const { platform, arch } = getPlatformAndArch();
 
-  // Build the executable path based on platform and architecture
-  let fullPath = './out/main';
-  fullPath += `-${platform}-${arch}`;
+  let fullPath = `${__dirname}/main-${platform}-${arch}`;
 
-  // Use child_process to execute the command
-  child_process.exec(fullPath, (error, stdout, stderr) => {
-    if (error) {
-      console.error(`Error executing command: ${error}`);
-      return;
-    }
-    console.log(`stdout: ${stdout}`);
-    console.error(`stderr: ${stderr}`);
-  });
+  let res = spawnSync(fullPath, { stdio: 'inherit' })
+  let code = res.status
+  if (typeof code === 'number') {
+    process.exit(code)
+  }
+  process.exit(1)
 }
 
 if (require.main === module) {
-    main()
+  main()
 }
