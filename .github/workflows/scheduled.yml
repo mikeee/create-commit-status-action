@@ -1,0 +1,18 @@
+name: Scheduled Validation of main (hourly)
+on:
+  schedule:
+    - cron: "0 * * * *"
+jobs:
+  validation:
+    name: validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: set pending commit status
+        run: |
+          echo "placeholder"
+
+      - name: check pending commit status
+        run: |
+          echo "placeholder"
+
+      # check error, failure, success and cancelled(failure) statuses
