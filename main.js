@@ -40,8 +40,8 @@ function main() {
 
   let fullPath = `${__dirname}/main-${platform}-${arch}`;
 
-  let res = spawnSync(fullPath, { stdio: 'inherit' })
-  let code = res.status
+  let res = spawnSync(fullPath, { stdio: 'inherit' });
+  let code = res.status;
   if (typeof code === 'number') {
     process.exit(code)
   }
